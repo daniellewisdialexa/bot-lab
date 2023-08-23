@@ -1,6 +1,8 @@
 const scores_API_URL = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard";
-
-async function getScores() {
+module.exports = class Scores {
+constructor(){}
+  
+async getScores() {
     try {
         const response = await fetch(scores_API_URL);
         const data = await response.json();
@@ -10,12 +12,19 @@ async function getScores() {
         console.error(error);
     }
 }
+ 
+async getCalendar() {
+ let data = await this.getScores();
+return {
+   Enteries: data.leagues[0].calendar[0].entries,
+   SeasonData: data.leagues[0].calendar[0]
+}
+    
+}
 
-async function getEvents() {
+
+async getEvents() {
     let data = await getScores();
     return data.events;
 }
- 
-
-getEvents().then(events => console.log(events));
-//getScores().then(data => console.log(data));
+}
