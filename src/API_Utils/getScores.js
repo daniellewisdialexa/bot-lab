@@ -2,7 +2,7 @@ const scores_API_URL = "http://site.api.espn.com/apis/site/v2/sports/football/co
 module.exports = class Scores {
 constructor(){}
   
-async getScores() {
+async getScoreBoardData() {
     try {
         const response = await fetch(scores_API_URL);
         const data = await response.json();
@@ -14,7 +14,7 @@ async getScores() {
 }
  
 async getCalendar() {
- let data = await this.getScores();
+ let data = await this.getScoreBoardData();
 return {
    Enteries: data.leagues[0].calendar[0].entries,
    SeasonData: data.leagues[0].calendar[0]
@@ -23,8 +23,22 @@ return {
 }
 
 
-async getEvents() {
-    let data = await getScores();
-    return data.events;
+async getEvents(theWeek) {
+    let events = [];
+    let data = await this.getScoreBoardData();
+    for(let event of data.events){
+        if(theWeek == null || theWeek == event['week'].number){
+            events.push(
+                {
+                    name:event.name,
+                    date: event.date,
+                    odds: event.competitions.odds
+                }
+
+            )
+        }
+    }
+    
+    return events;
 }
 }
