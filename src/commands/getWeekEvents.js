@@ -11,25 +11,30 @@ module.exports = {
     
 SM = new ScoreManager();
 SM.getEvents(week).then(events => {
-	var fields = [];
-
+	var fields = []; 
+	
 	for(var e of events){	
-		fields.push({
-				name: e.name,
-				value: e.date,
-                inline:true
-				
-			},
-            			
-		)
+		const gameDate = new Date( e.date).toLocaleDateString("en-US")
+		console.log(gameDate)
+	 fields.push(
+	    { name: 'Game', value: e.name },
+		{ name: 'Date', value: gameDate},
+		{ name: 'Venue', value: e.venueName },
+		{
+			name: '\u200b',
+			value: '\u200b',
+			inline: false,
+		},
+			)
 	}
 
     let embedArray = [];
 
-    for(var fieldChunks of arraySplitter(fields, 24)){
+    for(var fieldChunks of arraySplitter(fields, 25)){
     console.log(fieldChunks.length)
       const embed = new EmbedBuilder()
-		.setTitle('Get game data for a specific week')
+		.setTitle('All games for the week')
+        .setColor('Green')
 		.addFields( 
 			fieldChunks
 		)

@@ -28,11 +28,13 @@ async getEvents(theWeek) {
     let data = await this.getScoreBoardData();
     for(let event of data.events){
         if(theWeek == null || theWeek == event['week'].number){
+          //  console.log(event.competitions[0].odds)
             events.push(
                 {
                     name:event.name,
                     date: event.date,
-                    odds: event.competitions.odds
+                    venueName: event.competitions[0].venue.fullName,
+                    //oddsProvider: event.competitions[0],
                 }
 
             )
